@@ -46,7 +46,7 @@ export default function Contact() {
             ref={containerRef}
             onMouseMove={handleMouseMove}
             id="contact"
-            className="relative min-h-screen bg-[#030712] py-40 px-6 overflow-hidden flex flex-col justify-between"
+            className="relative min-h-screen bg-[#030712] py-24 md:py-30 lg:py-40 px-6 overflow-hidden flex flex-col justify-between"
         >
             <motion.div
                 style={{
@@ -181,8 +181,10 @@ export default function Contact() {
             </div>
 
             {/* Footer telemetry */}
-            <footer className="max-w-7xl mx-auto w-full mt-24 flex justify-between items-center text-[10px] font-mono text-white/20 border-t border-white/5 pt-12">
-                <div className="flex gap-10">
+            <footer className="max-w-7xl mx-auto w-full mt-16 md:mt-24 flex flex-col md:flex-row gap-8 md:gap-0 justify-between items-start md:items-center text-[10px] font-mono text-white/20 border-t border-white/5 pt-8 md:pt-12">
+
+                {/* Left */}
+                <div className="flex gap-6 md:gap-10 flex-wrap">
                     <div>
                         <p className="tracking-widest mb-1 text-white/40">LOCATION</p>
                         <p className="text-white/60">BENGALURU, IN</p>
@@ -193,17 +195,21 @@ export default function Contact() {
                     </div>
                 </div>
 
-                <div className="flex-1 text-center text-white/30 tracking-widest">
+                {/* Center */}
+                <div className="w-full md:flex-1 text-left md:text-center text-white/30 tracking-widest">
                     © {new Date().getFullYear()} RANJIMA GHOSH
                 </div>
 
-                <div className="text-right">
+                {/* Right */}
+                <div className="text-left md:text-right">
                     <p className="tracking-[0.4em] mb-1 text-white/50">SYSTEM_VERSION</p>
                     <p className="italic text-white/30 underline decoration-purple-500/30">
                         TERMINAL_V2.0
                     </p>
                 </div>
+
             </footer>
         </section>
     )
+
 }

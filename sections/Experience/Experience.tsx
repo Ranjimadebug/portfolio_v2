@@ -16,18 +16,18 @@ export default function Experience() {
             id: "01",
             role: "Software Engineer",
             company: "Indo-Sakura Software Pvt Ltd",
-            period: "2023 — Present",
-            desc: "Architecting Zonexa's core interface. Orchestrating complex state synchronization for real-time logistics and driver telemetry.",
-            stack: ["Next.js", "Redux", "Socket.io"]
+            period: "Jun 2025 — Present",
+            desc: "Developing scalable web applications using Next.js and React. Implementing efficient state management with Redux, integrating REST APIs, and handling real-time data using Socket.io. Improving application performance, responsiveness, and user experience.",
+            stack: ["Next.js", "React.js", "Redux Toolkit", "TypeScript", "REST APIs", "Socket.io", "HTML", "CSS"]
         },
         {
             id: "02",
             role: "Frontend Developer",
             company: "Ijona Technologies Pvt Ltd.",
-            period: "2023",
-            desc: "Led the UI development for WeMove. Implementation of high-precision mapping and dynamic fare calculation modules.",
-            stack: ["React", "Tailwind", "Google Maps"]
-        },
+            period: "Mar 2023 — Jun 2025",
+            desc: "Built and maintained responsive user interfaces for a ride-hailing platform using React.js. Integrated Google Maps APIs for location tracking and route visualization, implemented dynamic pricing features, and collaborated with backend teams for API integration.",
+            stack: ["React.js", "JavaScript", "HTML", "CSS", "Tailwind CSS", "Google Maps API", "REST APIs", "Git"]
+        }
     ]
 
 

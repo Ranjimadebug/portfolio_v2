@@ -68,7 +68,7 @@ export default function TechStack() {
         }
     }
     return (
-        <section id="skills" className="relative bg-[#030712] py-32 px-6">
+        <section id="skills" className="relative bg-[#030712] py-10 md:py-20 lg:py-24 px-6">
 
             <div className="max-w-7xl mx-auto grid lg:grid-cols-[1fr_1.5fr] gap-20">
 
