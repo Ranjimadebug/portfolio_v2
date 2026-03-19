@@ -1,6 +1,6 @@
 "use client"
 
-import { motion, useMotionValue, useSpring, useTransform, useScroll } from "framer-motion"
+import { motion, useMotionValue, useSpring, useTransform, useScroll, Variants } from "framer-motion"
 import { useRef } from "react"
 
 const projects = [
@@ -104,6 +104,17 @@ function ProjectCard({ project, index }: { project: any, index: number }) {
 }
 
 export default function Projects() {
+    const textItem: Variants = {
+        hidden: { opacity: 0, y: 30 },
+        show: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: 0.75,
+                ease: [0.22, 1, 0.36, 1]
+            }
+        }
+    }
     return (
         <section
             id="projects"
@@ -115,7 +126,7 @@ export default function Projects() {
             <div className="max-w-7xl mx-auto relative z-10">
                 <div className="mb-24">
 
-                    <motion.div
+                    {/* <motion.div
                         initial={{ opacity: 0, x: -20 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         className="flex items-center gap-4 mb-4"
@@ -126,11 +137,22 @@ export default function Projects() {
                             System.Archive (Projects)
                         </span>
 
-                    </motion.div>
+                    </motion.div> */}
 
-                    <h2 className="text-5xl md:text-6xl font-black text-white uppercase tracking-tighter">
+                    {/* label */}
+                    <div className="flex items-center gap-4 mb-6 group cursor-default">
+                        <div className="h-px w-8 bg-blue-500/50 group-hover:w-16 transition-all duration-500" />
+                        <motion.h2
+                            variants={textItem}
+                            className="text-[10px] lg:text-xs font-mono text-blue-400 tracking-[0.3em] lg:tracking-[0.5em] uppercase"
+                        >
+                            System.Archive (Projects)
+                        </motion.h2>
+                    </div>
 
-                        Selected <br />
+                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase tracking-tighter">
+
+                        Selected <br className="hidden sm:block" />
 
                         <span className="text-transparent bg-clip-text bg-linear-to-r from-purple-400 via-indigo-400 to-blue-500">
                             Artifacts

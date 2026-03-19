@@ -100,12 +100,10 @@ export default function About() {
 
             <motion.div
                 style={{ opacity, y }}
-                /* Changed: lg:grid-cols-2 for desktop, flex-col-reverse for mobile so text comes first or flex-col if visual stays on top */
                 className="relative z-10 max-w-6xl mx-auto flex flex-col lg:grid lg:grid-cols-2 gap-12 lg:gap-20 items-center"
             >
 
                 {/* ---------------- LEFT VISUAL ---------------- */}
-                {/* Changed: h-80 on mobile, h-125 on desktop. Added scale-75 for small screens */}
                 <div className="relative flex items-center justify-center h-80 lg:h-125 w-full scale-75 sm:scale-90 lg:scale-100">
 
                     {/* core glow */}
@@ -117,12 +115,8 @@ export default function About() {
                             Stable
                         </span>
                     </div>
-
-                    {/* orbit rings - Changed: used responsive sizes so they don't bleed off screen */}
                     <div className="absolute w-60 h-60 lg:w-75 lg:h-75 rounded-full border border-white/5 animate-spin-slow" />
                     <div className="absolute w-80 h-80 lg:w-112.5 lg:h-112.5 rounded-full border border-white/5 animate-spin-slow-reverse" />
-
-                    {/* location card - Changed: right-4 instead of 0 for mobile padding */}
                     <motion.div
                         animate={{ y: [0, -10, 0] }}
                         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
@@ -135,8 +129,6 @@ export default function About() {
                             Bengaluru, IN
                         </p>
                     </motion.div>
-
-                    {/* status card - Changed: left-4 instead of 0 for mobile padding */}
                     <motion.div
                         animate={{ y: [0, 15, 0] }}
                         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
@@ -149,8 +141,6 @@ export default function About() {
                             Open to Opportunities
                         </p>
                     </motion.div>
-
-                    {/* small hud indicator - Hidden on very small screens to reduce clutter */}
                     <motion.div
                         animate={{ scale: [1, 1.05, 1] }}
                         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}

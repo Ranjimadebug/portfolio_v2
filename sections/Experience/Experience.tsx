@@ -35,17 +35,19 @@ export default function Experience() {
         <section
             ref={sectionRef}
             id="experience"
-            className="relative h-[250vh] bg-[#030712]"
+            className="relative h-[180vh] md:h-[250vh] bg-[#030712]"
         >
-            <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-200 h-200 bg-purple-900/10 blur-[120px] rounded-full pointer-events-none" />
+            <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-72 h-72 md:w-200 md:h-100 bg-purple-900/10 blur-[80px] md:blur-[120px] rounded-full pointer-events-none" />
+
             <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
                 <motion.div
                     style={{ x: bgX }}
-                    className="absolute whitespace-nowrap opacity-[0.02] pointer-events-none select-none font-black italic text-white text-[15vh] uppercase tracking-[0.2em]"
+                    className="absolute whitespace-nowrap opacity-[0.02] pointer-events-none select-none font-black italic text-white text-[8vh] md:text-[15vh] uppercase tracking-[0.2em]"
                 >
                     Mission_Timeline Mission_Timeline Mission_Timeline
                 </motion.div>
-                <div className="relative w-full flex items-center justify-center">
+
+                <div className="relative w-full flex items-center justify-center px-4">
                     {experience.map((exp, i) => {
                         const x = useTransform(
                             scrollYProgress,
@@ -75,7 +77,7 @@ export default function Experience() {
                                     position: i === 0 ? "relative" : "absolute",
                                     perspective: "1200px"
                                 }}
-                                className="group w-[85vw] md:w-[50vw] shrink-0"
+                                className="group w-[90vw] md:w-[50vw] shrink-0"
                             >
                                 {/* Hover Glow */}
                                 <div className="absolute -inset-10 opacity-0 group-hover:opacity-100 transition duration-1000 pointer-events-none bg-[radial-gradient(circle_at_center,rgba(168,85,247,0.1),transparent_70%)] blur-3xl" />
@@ -83,11 +85,11 @@ export default function Experience() {
                                 <motion.div
                                     whileHover={{ rotateY: -5, rotateX: 2, scale: 1.01 }}
                                     transition={{ type: "spring", stiffness: 150, damping: 25 }}
-                                    className="relative p-8 md:p-12 rounded-3xl border border-white/10 bg-white/3 backdrop-blur-2xl shadow-2xl overflow-hidden"
+                                    className="relative p-6 md:p-12 rounded-2xl md:rounded-3xl border border-white/10 bg-white/3 backdrop-blur-2xl shadow-2xl overflow-hidden"
                                 >
                                     {/* Header Section */}
-                                    <div className="flex items-center gap-4 mb-10">
-                                        <span className="font-mono text-[10px] text-purple-400 tracking-[0.4em] uppercase">
+                                    <div className="flex items-center gap-4 mb-6 md:mb-10">
+                                        <span className="font-mono text-[8px] md:text-[10px] text-purple-400 tracking-[0.4em] uppercase">
                                             EXE_LOG_{exp.id}
                                         </span>
                                         <div className="relative flex-1 h-px bg-white/10 overflow-hidden">
@@ -100,17 +102,19 @@ export default function Experience() {
                                         </div>
                                     </div>
 
-                                    <h3 className="text-4xl md:text-[60px] leading-[1.1] font-bold text-white mb-4 group-hover:text-purple-300 transition-colors duration-500 tracking-tighter">
+                                    <h3 className="text-2xl md:text-[60px] leading-[1.2] md:leading-[1.1] font-bold text-white mb-2 md:mb-4 group-hover:text-purple-300 transition-colors duration-500 tracking-tighter">
                                         {exp.role}
                                     </h3>
 
-                                    <div className="flex items-center gap-3 mb-8">
-                                        <p className="text-xl text-blue-400 font-light italic">@{exp.company}</p>
-                                        <span className="text-white/20">/</span>
-                                        <p className="font-mono text-xs text-white/40 tracking-widest">{exp.period}</p>
+                                    <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-6 md:mb-8">
+                                        <p className="text-lg md:text-xl text-blue-400 font-light italic">@{exp.company}</p>
+                                        <span className="hidden md:block text-white/20">/</span>
+                                        <p className="font-mono text-[10px] md:text-xs text-white/40 tracking-widest w-full md:w-auto uppercase">
+                                            {exp.period}
+                                        </p>
                                     </div>
 
-                                    <p className="text-gray-400 text-sm md:text-lg leading-relaxed mb-10 max-w-xl border-l-2 border-white/5 pl-6 group-hover:border-purple-500/40 transition-colors">
+                                    <p className="text-gray-400 text-sm md:text-lg leading-relaxed mb-8 md:mb-10 max-w-xl border-l-2 border-white/5 pl-4 md:pl-6 group-hover:border-purple-500/40 transition-colors">
                                         {exp.desc}
                                     </p>
 
@@ -118,14 +122,14 @@ export default function Experience() {
                                         {exp.stack.map((t) => (
                                             <span
                                                 key={t}
-                                                className="px-4 py-1.5 text-[10px] font-mono border border-white/10 bg-white/5 text-white/60 rounded-full hover:border-blue-500/50 hover:text-blue-300 transition-all duration-300"
+                                                className="px-3 py-1 md:px-4 md:py-1.5 text-[8px] md:text-[10px] font-mono border border-white/10 bg-white/5 text-white/60 rounded-full hover:border-blue-500/50 hover:text-blue-300 transition-all duration-300"
                                             >
                                                 {t}
                                             </span>
                                         ))}
                                     </div>
 
-                                    <div className="absolute -bottom-6 -right-4 text-[120px] font-black text-white/2 group-hover:text-purple-500/5 transition-colors pointer-events-none italic">
+                                    <div className="absolute -bottom-4 -right-2 md:-bottom-6 md:-right-4 text-[60px] md:text-[120px] font-black text-white/2 group-hover:text-purple-500/5 transition-colors pointer-events-none italic">
                                         0{i + 1}
                                     </div>
                                 </motion.div>

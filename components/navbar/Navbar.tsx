@@ -12,7 +12,7 @@ import {
 import { useState, useEffect } from "react"
 
 export default function Navbar() {
-    const links = ["About", "Projects", "Experience", "Contact"]
+    const links = ["About", "Projects", "Experience", "Skills", "Contact"]
 
     const [scrolled, setScrolled] = useState(false)
     const [activeSection, setActiveSection] = useState("")

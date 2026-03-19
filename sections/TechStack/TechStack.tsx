@@ -55,8 +55,20 @@ export default function TechStack() {
     useEffect(() => {
         startSlow()
     }, [])
+
+    const textItem: Variants = {
+        hidden: { opacity: 0, y: 30 },
+        show: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: 0.75,
+                ease: [0.22, 1, 0.36, 1]
+            }
+        }
+    }
     return (
-        <section className="relative bg-[#030712] py-32 px-6">
+        <section id="skills" className="relative bg-[#030712] py-32 px-6">
 
             <div className="max-w-7xl mx-auto grid lg:grid-cols-[1fr_1.5fr] gap-20">
 
@@ -69,22 +81,26 @@ export default function TechStack() {
                         viewport={{ once: true }}
                         className="space-y-6"
                     >
-                        <div className="flex items-center gap-4">
-                            <div className="h-px w-12 bg-purple-500" />
 
-                            <span className="font-mono text-[10px] text-purple-500 tracking-[0.5em] uppercase">
+                        {/* label */}
+                        <div className="flex items-center gap-4 mb-6 group cursor-default">
+                            <div className="h-px w-8 bg-blue-500/50 group-hover:w-16 transition-all duration-500" />
+                            <motion.h2
+                                variants={textItem}
+                                className="text-[10px] lg:text-xs font-mono text-blue-400 tracking-[0.3em] lg:tracking-[0.5em] uppercase"
+                            >
                                 System.Modules (Tech_Stack)
-                            </span>
+                            </motion.h2>
                         </div>
 
-                        <h2 className="text-4xl md:text-[60px] font-black text-white leading-[1.1] tracking-tighter uppercase">
-                            Modern <br />
+                        <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-[1.1] tracking-tighter uppercase">
+                            Modern <br className="hidden sm:block" />
                             <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-purple-500 italic">
                                 Stack
                             </span>
                         </h2>
 
-                        <p className="max-w-xs text-neutral-500 font-light leading-relaxed">
+                        <p className="max-w-xl md:max-w-xs text-neutral-500 font-light leading-relaxed">
                             A curated selection of technologies used to build high-performance,
                             frame-perfect digital experiences.
                         </p>

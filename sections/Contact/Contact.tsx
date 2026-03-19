@@ -1,6 +1,6 @@
 "use client"
 
-import { motion, useMotionValue, useSpring, useTransform, useScroll } from "framer-motion"
+import { motion, useMotionValue, useSpring, useTransform, useScroll, Variants } from "framer-motion"
 import { useRef } from "react"
 
 export default function Contact() {
@@ -29,6 +29,18 @@ export default function Contact() {
         mouseY.set(e.clientY - rect.top)
     }
 
+    const textItem: Variants = {
+        hidden: { opacity: 0, y: 30 },
+        show: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: 0.75,
+                ease: [0.22, 1, 0.36, 1]
+            }
+        }
+    }
+
     return (
         <section
             ref={containerRef}
@@ -51,15 +63,26 @@ export default function Contact() {
                     className="mb-24"
                 >
 
-                    <div className="flex items-center gap-2 pb-2">
+                    {/* <div className="flex items-center gap-2 pb-2">
                         <div className="h-px w-12 bg-purple-500" />
                         <span className="text-xs font-mono text-purple-400 tracking-[0.3em] uppercase">
                             System.Connect (Contact)
                         </span>
+                    </div> */}
+
+                    {/* label */}
+                    <div className="flex items-center gap-4 mb-6 group cursor-default">
+                        <div className="h-px w-8 bg-blue-500/50 group-hover:w-16 transition-all duration-500" />
+                        <motion.h2
+                            variants={textItem}
+                            className="text-[10px] lg:text-xs font-mono text-blue-400 tracking-[0.3em] lg:tracking-[0.5em] uppercase"
+                        >
+                            System.Connect (Contact)
+                        </motion.h2>
                     </div>
 
 
-                    <h2 className="text-5xl md:text-[60px] leading-[0.95] font-black text-white uppercase tracking-tighter">
+                    <h2 className="text-4xl md:text-5xl lg:text-6xl leading-[0.95] font-black text-white uppercase tracking-tighter">
                         <motion.span className="block">Let's</motion.span>
                         <motion.span
                             initial={{ letterSpacing: "-0.05em" }}
@@ -88,8 +111,6 @@ export default function Contact() {
                         <div className="text-purple-500 text-4xl group-hover/link:translate-x-6 transition-transform duration-500 pr-4">
                             →
                         </div>
-
-                        {/* Smoother background transition to prevent flashing */}
                         <div className="absolute inset-0 bg-white/2 opacity-0 group-hover/link:opacity-100 transition-opacity duration-700" />
                     </motion.a>
 
