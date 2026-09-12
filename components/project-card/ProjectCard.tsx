@@ -118,7 +118,7 @@ export default function ProjectCard({
 
                         {/* CTA */}
 
-                        <div className="mt-8 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white/40 group-hover:text-white transition-colors">
+                        <div className="mt-8 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white/60 group-hover:text-white transition-colors">
 
                             Explore Mission
 

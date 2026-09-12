@@ -1,23 +1,45 @@
 @import "tailwindcss";
 
+/* next-themes toggles a `.dark` class on <html> (see theme-provider.tsx,
+   attribute="class"), but Tailwind v4's `dark:` variant defaults to
+   `@media (prefers-color-scheme: dark)` unless told otherwise. Without this,
+   every `dark:` utility in the project (Starfield's ambient glow included)
+   was actually keyed to the OS light/dark setting instead of the in-app
+   theme toggle, which made the background look inconsistent depending on
+   the visitor's OS preference rather than the app's own (dark-by-default)
+   theme. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #1e3a8a;
-  --card: #f9fafb;
-  --border: #e5e7eb;
-  --card-rgb: 255, 255, 255;
-  --border-rgb: 229, 229, 229;
+  /* A warm "morning light" neutral palette instead of a stark white —
+     paper/ivory background, warm charcoal text, soft amber-tinted borders.
+     Every section renders a solid --background, so this single set of
+     tokens is what actually reads as "the page" in light mode. */
+  --background: #faf6ef;
+  --foreground: #211c16;
+  --muted: #6b5f52;
+  --card: #f3ede1;
+  --border: rgba(64, 48, 26, 0.12);
+  --border-soft: rgba(64, 48, 26, 0.06);
+  --card-rgb: 243, 237, 225;
+  --border-rgb: 229, 219, 200;
   --accent: #2563eb;
 }
 
 .dark {
-  --background: #0b0f19;
+  /* Matches the literal bg-[#030712] every section already hardcodes, so
+     the CSS-variable-driven surfaces (nav pill, cursor glow, etc.) line up
+     exactly with the section backgrounds instead of a slightly different
+     dark navy. */
+  --background: #030712;
   --foreground: #ffffff;
-  --card: #111827;
-  --border: #1f2937;
-  --accent: #3b82f6;
-  --card-rgb: 17, 24, 39;
+  --muted: #9ca3af;
+  --card: #000000;
+  --border: rgba(255, 255, 255, 0.1);
+  --border-soft: rgba(255, 255, 255, 0.05);
+  --card-rgb: 0, 0, 0;
   --border-rgb: 75, 85, 99;
+  --accent: #3b82f6;
 }
 
 body {
@@ -35,7 +57,13 @@ body {
 }
 
 .dark body {
-  background: radial-gradient(circle at top, #1a1f36, #0b0f19);
+  background: radial-gradient(circle at top, #1a1f36, #030712);
+}
+
+/* Soft sunrise wash behind the light theme — mirrors the dark theme's own
+   top-down radial gradient so both modes get the same atmospheric touch. */
+:root:not(.dark) body {
+  background: radial-gradient(circle at top, #fff3dd 0%, #faf6ef 45%, #f3ede1 100%);
 }
 
 @keyframes gradientMove {

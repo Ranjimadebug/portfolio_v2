@@ -23,7 +23,7 @@ export default function Hero() {
         <section
             id="hero"
             ref={containerRef}
-            className="relative min-h-screen w-full bg-[#030712] flex flex-col items-center justify-center overflow-hidden px-6"
+            className="relative min-h-screen w-full bg-(--background) flex flex-col items-center justify-center overflow-hidden px-6"
         >
             {/* 1. SIDEBAR DATA (Slide out on scroll) */}
             <motion.div
@@ -31,7 +31,7 @@ export default function Hero() {
                 className="absolute left-8 bottom-12 hidden lg:flex flex-col gap-1"
             >
                 <span className="text-[10px] font-mono text-blue-400/50 uppercase tracking-tighter">System.Loc_</span>
-                <span className="text-[12px] font-mono text-white/70 uppercase tracking-widest">Bengaluru, IN</span>
+                <span className="text-[12px] font-mono text-(--foreground)/70 uppercase tracking-widest">Bengaluru, IN</span>
             </motion.div>
 
             <motion.div
@@ -39,7 +39,7 @@ export default function Hero() {
                 className="absolute right-8 bottom-12 hidden lg:flex flex-col items-end gap-1"
             >
                 <span className="text-[10px] font-mono text-blue-400/50 uppercase tracking-tighter">System.Status_</span>
-                <span className="text-[12px] font-mono text-white/70 uppercase tracking-widest">Active</span>
+                <span className="text-[12px] font-mono text-(--foreground)/70 uppercase tracking-widest">Active</span>
             </motion.div>
 
             {/* 2. MAIN COMPOSITION */}
@@ -62,7 +62,7 @@ export default function Hero() {
                         initial={{ x: -20, opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
                         transition={{ ...transition, delay: 0.2 }}
-                        className="text-7xl md:text-[5.5rem] font-semibold text-white tracking-tight"
+                        className="text-7xl md:text-[5.5rem] font-semibold text-(--foreground) tracking-tight"
                     >
                         Ranjima
                     </motion.span>
@@ -84,7 +84,7 @@ export default function Hero() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 1, duration: 1 }}
                     // Added: w-full, justify-center, and text-center
-                    className="mt-8 flex w-full items-center justify-center gap-4 text-white/40 font-mono text-[10px] tracking-[0.3em] uppercase text-center"
+                    className="mt-8 flex w-full items-center justify-center gap-4 text-(--foreground)/60 font-mono text-[10px] tracking-[0.3em] uppercase text-center"
                 >
                     Designing Interactive Digital Architectures
                 </motion.div>
@@ -98,14 +98,14 @@ export default function Hero() {
                 className="absolute bottom-10 flex flex-col items-center"
             >
                 {/* Technical "Drawing" Line */}
-                <div className="relative h-20 w-px bg-white/5 overflow-hidden">
+                <div className="relative h-20 w-px bg-(--foreground)/5 overflow-hidden">
                     <motion.div
                         animate={{ y: ["-100%", "100%"] }}
                         transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
                         className="absolute top-0 left-0 w-full h-1/2 bg-linear-to-b from-transparent via-blue-500/60 to-transparent"
                     />
                 </div>
-                <span className="mt-4 text-[8px] font-mono text-white/70 uppercase tracking-[0.8em]">
+                <span className="mt-4 text-[8px] font-mono text-(--foreground)/70 uppercase tracking-[0.8em]">
                     Scroll
                 </span>
             </motion.div>
@@ -117,8 +117,3 @@ export default function Hero() {
         </section>
     )
 }
-
-
-
-
-

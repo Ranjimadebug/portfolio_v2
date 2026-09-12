@@ -1,36 +1,10 @@
 "use client"
 
-import { motion, useMotionValue, useSpring, useTransform, useScroll, Variants } from "framer-motion"
-import { useRef } from "react"
+import { motion, useMotionValue, useSpring, useTransform, Variants } from "framer-motion"
+import Link from "next/link"
+import { projects, Project } from "@/data/projects"
 
-const projects = [
-    {
-        title: "MediSlot",
-        desc: "Full-stack healthcare SaaS platform for doctor appointment scheduling with dedicated dashboards for patients, doctors, and admins.",
-        stack: ["Next.js", "Node.js", "MongoDB", "Express"],
-        id: "01"
-    },
-    {
-        title: "ConvoCore",
-        desc: "Real-time chat application supporting instant messaging, typing indicators, and scalable socket-based communication.",
-        stack: ["Next.js", "Node.js", "MongoDB", "Socket.io"],
-        id: "02"
-    },
-    // {
-    //     title: "FlowBoard",
-    //     desc: "Collaborative task management tool featuring kanban boards, drag-and-drop interactions, and real-time team updates.",
-    //     stack: ["React", "Node.js", "MongoDB", "Socket.io"],
-    //     id: "03"
-    // },
-    {
-        title: "DevPulse",
-        desc: "Developer analytics dashboard visualizing GitHub activity, commit frequency, and project insights through interactive charts.",
-        stack: ["Next.js", "Node.js", "GitHub API", "Recharts"],
-        id: "03"
-    }
-]
-
-function ProjectCard({ project, index }: { project: any, index: number }) {
+function ProjectCard({ project, index }: { project: Project, index: number }) {
     const x = useMotionValue(0)
     const y = useMotionValue(0)
 
@@ -58,48 +32,50 @@ function ProjectCard({ project, index }: { project: any, index: number }) {
     }
 
     return (
-        <motion.div
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-            style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-            className="group relative h-100 w-full rounded-2xl border border-white/10 bg-linear-to-br from-white/5 to-transparent p-1 cursor-none"
-        >
-            <div
-                style={{ transform: "translateZ(50px)" }}
-                className="relative h-full w-full rounded-2xl bg-black/80 p-8 overflow-hidden border border-white/5"
+        <Link href={`/projects/${project.slug}/`} className="block cursor-none">
+            <motion.div
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+                style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="group relative h-100 w-full rounded-2xl border border-(--border) bg-linear-to-br from-(--foreground)/5 to-transparent p-1"
             >
-                {/* Background Glow Effect */}
-                <div className="absolute -inset-px bg-linear-to-br from-purple-500/20 via-transparent to-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div
+                    style={{ transform: "translateZ(50px)" }}
+                    className="relative h-full w-full rounded-2xl bg-(--card)/80 p-8 overflow-hidden border border-(--border-soft)"
+                >
+                    {/* Background Glow Effect */}
+                    <div className="absolute -inset-px bg-linear-to-br from-purple-500/20 via-transparent to-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                {/* Geometric Decorative Corner */}
-                <div className="absolute top-0 right-0 w-16 h-16 border-t-2 border-r-2 border-purple-500/30 rounded-tr-2xl group-hover:border-purple-400 transition-colors" />
+                    {/* Geometric Decorative Corner */}
+                    <div className="absolute top-0 right-0 w-16 h-16 border-t-2 border-r-2 border-purple-500/30 rounded-tr-2xl group-hover:border-purple-400 transition-colors" />
 
-                <div className="relative z-10 flex flex-col h-full">
-                    <span className="text-xs font-mono text-purple-400/60 mb-2">COORD_0{project.id}</span>
-                    <h3 className="text-3xl font-bold text-white mb-4 group-hover:text-purple-300 transition-colors">
-                        {project.title}
-                    </h3>
-                    <p className="text-gray-400 text-sm leading-relaxed mb-auto">
-                        {project.desc}
-                    </p>
+                    <div className="relative z-10 flex flex-col h-full">
+                        <span className="text-xs font-mono text-purple-700/70 dark:text-purple-400/60 mb-2">COORD_0{project.id}</span>
+                        <h3 className="text-3xl font-bold text-(--foreground) mb-4 group-hover:text-purple-300 transition-colors">
+                            {project.title}
+                        </h3>
+                        <p className="text-(--muted) text-sm leading-relaxed mb-auto">
+                            {project.desc}
+                        </p>
 
-                    <div className="mt-6 flex flex-wrap gap-2">
-                        {project.stack.map((tech: string) => (
-                            <span key={tech} className="text-[10px] px-2 py-1 rounded-sm border border-white/10 bg-white/5 text-blue-300 font-mono">
-                                {tech}
-                            </span>
-                        ))}
-                    </div>
+                        <div className="mt-6 flex flex-wrap gap-2">
+                            {project.stack.map((tech: string) => (
+                                <span key={tech} className="text-[10px] px-2 py-1 rounded-sm border border-(--border) bg-(--foreground)/5 text-blue-700 dark:text-blue-400 font-mono">
+                                    {tech}
+                                </span>
+                            ))}
+                        </div>
 
-                    <div className="mt-8 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white/40 group-hover:text-white transition-colors">
-                        Explore Mission <span className="group-hover:translate-x-2 transition-transform">→</span>
+                        <div className="mt-8 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-(--foreground)/60 group-hover:text-(--foreground) transition-colors">
+                            Explore Mission <span className="group-hover:translate-x-2 transition-transform">→</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </motion.div>
+            </motion.div>
+        </Link>
     )
 }
 
@@ -118,26 +94,13 @@ export default function Projects() {
     return (
         <section
             id="projects"
-            className="relative min-h-screen bg-[#030712] px-6 py-32 overflow-hidden"
+            className="relative min-h-screen bg-(--background) px-6 py-32 overflow-x-hidden"
         >
             {/* Background Ambient Light */}
             <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-200 h-200 bg-purple-900/10 blur-[120px] rounded-full pointer-events-none" />
 
             <div className="max-w-7xl mx-auto relative z-10">
                 <div className="mb-24">
-
-                    {/* <motion.div
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        className="flex items-center gap-4 mb-4"
-                    >
-                        <div className="h-px w-12 bg-purple-500" />
-
-                        <span className="text-xs font-mono text-purple-400 tracking-[0.3em] uppercase">
-                            System.Archive (Projects)
-                        </span>
-
-                    </motion.div> */}
 
                     {/* label */}
                     <div className="flex items-center gap-4 mb-6 group cursor-default">
@@ -150,7 +113,7 @@ export default function Projects() {
                         </motion.h2>
                     </div>
 
-                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase tracking-tighter">
+                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-(--foreground) uppercase tracking-tighter">
 
                         Selected <br className="hidden sm:block" />
 
@@ -171,5 +134,3 @@ export default function Projects() {
         </section>
     )
 }
-
-

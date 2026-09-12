@@ -1,10 +1,16 @@
 "use client"
 
 import { motion, useMotionValue, useSpring } from "framer-motion"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 export default function Cursor() {
-    const [isMobile, setIsMobile] = useState(false)
+    // Lazy initializer instead of an effect + setState: this reads
+    // matchMedia synchronously during the client render (matchMedia is a
+    // browser API, and this component only ever renders on the client), so
+    // there's no extra render pass just to flip isMobile.
+    const [isMobile] = useState(
+        () => typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches
+    )
     const [isHovering, setIsHovering] = useState(false)
 
     const mouseX = useMotionValue(0)
@@ -16,40 +22,64 @@ export default function Cursor() {
     const trailX = useSpring(mouseX, { stiffness: 60, damping: 20 })
     const trailY = useSpring(mouseY, { stiffness: 60, damping: 20 })
 
+    // Latest raw pointer position, applied to the motion values at most
+    // once per animation frame (see rafId below) instead of once per
+    // "mousemove" event. A mouse/trackpad can fire mousemove far more often
+    // than the screen actually repaints, and each of those events was
+    // triggering framer-motion spring recalculation work — this is what
+    // made the cursor itself a source of constant background load.
+    const latest = useRef({ x: 0, y: 0 })
+    const rafId = useRef(0)
+    const scheduled = useRef(false)
+
     useEffect(() => {
-        if (window.matchMedia("(pointer: coarse)").matches) {
-            setIsMobile(true)
-            return
+        if (isMobile) return
+
+        const flush = () => {
+            scheduled.current = false
+            mouseX.set(latest.current.x)
+            mouseY.set(latest.current.y)
         }
 
         const move = (e: MouseEvent) => {
-            mouseX.set(e.clientX)
-            mouseY.set(e.clientY)
+            latest.current.x = e.clientX
+            latest.current.y = e.clientY
+
+            if (!scheduled.current) {
+                scheduled.current = true
+                rafId.current = requestAnimationFrame(flush)
+            }
         }
 
-        const handleHoverStart = () => setIsHovering(true)
-        const handleHoverEnd = () => setIsHovering(false)
+        // Event delegation instead of attaching a listener to every
+        // interactive element up front: one pair of listeners on the
+        // document, matched with closest(), so hover state works for
+        // elements that mount later too (e.g. the case-study pages), which
+        // the old querySelectorAll-on-mount snapshot missed.
+        const handleOver = (e: MouseEvent) => {
+            if ((e.target as HTMLElement)?.closest?.("a, button, [data-cursor]")) {
+                setIsHovering(true)
+            }
+        }
 
-        const interactive = document.querySelectorAll(
-            "a, button, [data-cursor]"
-        )
+        const handleOut = (e: MouseEvent) => {
+            const related = e.relatedTarget as HTMLElement | null
+            if (!related?.closest?.("a, button, [data-cursor]")) {
+                setIsHovering(false)
+            }
+        }
 
-        interactive.forEach((el) => {
-            el.addEventListener("mouseenter", handleHoverStart)
-            el.addEventListener("mouseleave", handleHoverEnd)
-        })
-
-        window.addEventListener("mousemove", move)
+        window.addEventListener("mousemove", move, { passive: true })
+        document.addEventListener("mouseover", handleOver)
+        document.addEventListener("mouseout", handleOut)
 
         return () => {
             window.removeEventListener("mousemove", move)
-
-            interactive.forEach((el) => {
-                el.removeEventListener("mouseenter", handleHoverStart)
-                el.removeEventListener("mouseleave", handleHoverEnd)
-            })
+            document.removeEventListener("mouseover", handleOver)
+            document.removeEventListener("mouseout", handleOut)
+            cancelAnimationFrame(rafId.current)
         }
-    }, [])
+    }, [isMobile, mouseX, mouseY])
 
     if (isMobile) return null
 
@@ -62,7 +92,7 @@ export default function Cursor() {
                 transition={{ type: "spring", stiffness: 200, damping: 20 }}
                 className="fixed top-0 left-0 pointer-events-none z-9998"
             >
-                <div className="w-12 h-12 rounded-full bg-blue-400/50 blur-xl" />
+                <div className="w-12 h-12 rounded-full bg-blue-400/50 blur-md" />
             </motion.div>
 
             {/* star head */}
@@ -77,4 +107,3 @@ export default function Cursor() {
         </>
     )
 }
-

@@ -68,7 +68,7 @@ export default function TechStack() {
         }
     }
     return (
-        <section id="skills" className="relative bg-[#030712] py-10 md:py-20 lg:py-24 px-6">
+        <section id="skills" className="relative bg-(--background) py-10 md:py-20 lg:py-24 px-6">
 
             <div className="max-w-7xl mx-auto grid lg:grid-cols-[1fr_1.5fr] gap-20">
 
@@ -93,14 +93,14 @@ export default function TechStack() {
                             </motion.h2>
                         </div>
 
-                        <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-[1.1] tracking-tighter uppercase">
+                        <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-(--foreground) leading-[1.1] tracking-tighter uppercase">
                             Modern <br className="hidden sm:block" />
                             <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-purple-500 italic">
                                 Stack
                             </span>
                         </h2>
 
-                        <p className="max-w-xl md:max-w-xs text-neutral-500 font-light leading-relaxed">
+                        <p className="max-w-xl md:max-w-xs text-(--muted) font-light leading-relaxed">
                             A curated selection of technologies used to build high-performance,
                             frame-perfect digital experiences.
                         </p>
@@ -111,7 +111,7 @@ export default function TechStack() {
 
 
                 {/* RIGHT SIDE GRID */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-white/10 border border-white/10 overflow-hidden rounded-2xl">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-(--border) border border-(--border) overflow-hidden rounded-2xl">
 
                     {skills.map((skill, i) => (
                         <SkillTile key={skill.id} skill={skill} index={i} />
@@ -124,13 +124,13 @@ export default function TechStack() {
 
             {/* MARQUEE */}
             <div
-                className="mt-24 overflow-hidden py-10 border-y border-white/5 whitespace-nowrap"
+                className="mt-24 overflow-hidden py-10 border-y border-(--border-soft) whitespace-nowrap"
                 onMouseEnter={startFast}
                 onMouseLeave={startSlow}
             >
                 <motion.div
                     animate={controls}
-                    className="flex gap-20 text-[60px] font-black text-white/4 uppercase italic"
+                    className="flex gap-20 text-[60px] font-black text-(--foreground)/10 uppercase italic"
                 >
                     {[...stack, ...stack].map((item, i) => (
                         <span key={item + i}>{item}</span>
@@ -149,7 +149,7 @@ function SkillTile({ skill, index }: { skill: typeof skills[0], index: number })
             whileInView={{ opacity: 1 }}
             transition={{ delay: index * 0.05 }}
             viewport={{ once: true }}
-            className="group relative bg-black p-10 flex flex-col justify-between h-65 hover:bg-white/2 transition-colors duration-500 overflow-hidden"
+            className="group relative bg-(--card) p-10 flex flex-col justify-between h-65 hover:bg-(--foreground)/2 transition-colors duration-500 overflow-hidden"
         >
 
             {/* top hover accent */}
@@ -157,7 +157,7 @@ function SkillTile({ skill, index }: { skill: typeof skills[0], index: number })
 
 
             {/* subtle grid texture */}
-            <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,white_1px,transparent_1px),linear-gradient(to_bottom,white_1px,transparent_1px)] bg-size-[24px_24px]" />
+            <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,var(--foreground)_1px,transparent_1px),linear-gradient(to_bottom,var(--foreground)_1px,transparent_1px)] bg-size-[24px_24px]" />
 
 
             {/* glow */}
@@ -167,14 +167,14 @@ function SkillTile({ skill, index }: { skill: typeof skills[0], index: number })
             {/* top row */}
             <div className="flex justify-between items-start">
 
-                <span className="font-mono text-[10px] text-white/20 tracking-widest">
+                <span className="font-mono text-[10px] text-(--foreground)/45 tracking-widest">
                     {skill.id}
                 </span>
 
                 <div className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-purple-500 opacity-0 group-hover:opacity-100 transition-all duration-500" />
 
-                    <span className="font-mono text-[9px] text-white/10 tracking-widest">
+                    <span className="font-mono text-[9px] text-(--foreground)/40 tracking-widest">
                         ACTIVE
                     </span>
                 </div>
@@ -183,17 +183,17 @@ function SkillTile({ skill, index }: { skill: typeof skills[0], index: number })
 
 
             {/* divider */}
-            <div className="h-px w-full bg-white/5 my-4 group-hover:bg-purple-500/30 transition-colors" />
+            <div className="h-px w-full bg-(--border-soft) my-4 group-hover:bg-purple-500/30 transition-colors" />
 
 
             {/* skill */}
             <div>
 
-                <h4 className="text-2xl md:text-3xl font-bold text-white mb-3 group-hover:translate-x-2 transition-transform duration-500">
+                <h4 className="text-2xl md:text-3xl font-bold text-(--foreground) mb-3 group-hover:translate-x-2 transition-transform duration-500">
                     {skill.name}
                 </h4>
 
-                <span className="font-mono text-[10px] text-purple-400 tracking-[0.3em] uppercase">
+                <span className="font-mono text-[10px] text-purple-500 dark:text-purple-400 tracking-[0.3em] uppercase">
                     {skill.level}
                 </span>
 
@@ -201,7 +201,7 @@ function SkillTile({ skill, index }: { skill: typeof skills[0], index: number })
 
 
             {/* bottom meta */}
-            <div className="flex justify-between items-end text-[9px] font-mono text-white/10 tracking-widest">
+            <div className="flex justify-between items-end text-[9px] font-mono text-(--foreground)/40 tracking-widest">
 
                 <span>MODULE_{skill.id}</span>
                 <span>READY</span>
@@ -217,12 +217,12 @@ function SkillTile({ skill, index }: { skill: typeof skills[0], index: number })
                     height="22"
                     viewBox="0 0 24 24"
                     fill="none"
-                    className="opacity-0 group-hover:opacity-20 transition-all group-hover:rotate-45 duration-700"
+                    className="opacity-0 group-hover:opacity-60 transition-all group-hover:rotate-45 duration-700"
                 >
 
                     <path
                         d="M7 17L17 7M17 7H7M17 7V17"
-                        stroke="white"
+                        stroke="var(--foreground)"
                         strokeWidth="2"
                         strokeLinecap="round"
                         strokeLinejoin="round"

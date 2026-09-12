@@ -10,6 +10,10 @@ import {
     AnimatePresence
 } from "framer-motion"
 import { useState, useEffect } from "react"
+import { usePathname } from "next/navigation"
+import { useTheme } from "next-themes"
+import { getLenis } from "@/hooks/useLenis"
+import ThemeToggle from "@/components/ui/ThemeToggle"
 
 export default function Navbar() {
     const links = ["About", "Projects", "Experience", "Skills", "Contact"]
@@ -17,6 +21,23 @@ export default function Navbar() {
     const [scrolled, setScrolled] = useState(false)
     const [activeSection, setActiveSection] = useState("")
     const [isOpen, setIsOpen] = useState(false)
+    const { theme } = useTheme()
+    const isDark = theme !== "light"
+
+    // This Navbar is shared by the homepage (where the section ids actually
+    // exist on the page, so links smooth-scroll in place) and other routes
+    // like a project detail page (where they don't). Off the homepage, the
+    // links instead navigate to "/#section" — a real link, so the browser/
+    // Next.js handles jumping to that section once the homepage has loaded.
+    const pathname = usePathname()
+    const isHome = pathname === "/"
+
+    // On a project detail page there's no scroll position to derive an
+    // active section from, but "Projects" should still read as active
+    // since that's conceptually where you are.
+    const isProjectRoute = pathname?.startsWith("/projects") ?? false
+    const isLinkActive = (item: string) =>
+        isProjectRoute ? item.toLowerCase() === "projects" : activeSection === item.toLowerCase()
 
     const { scrollY, scrollYProgress } = useScroll()
 
@@ -71,8 +92,18 @@ export default function Navbar() {
 
     const scrollToSection = (id: string) => {
         const element = document.getElementById(id)
+        if (!element) return
 
-        if (element) {
+        // Route through the shared Lenis instance when it's active so this
+        // doesn't fight the page's smooth-scroll with a second, competing
+        // native smooth-scroll animation. Falls back to the native
+        // behaviour if Lenis hasn't mounted yet (e.g. this page doesn't use
+        // useLenis()).
+        const lenis = getLenis()
+
+        if (lenis) {
+            lenis.scrollTo(element, { offset: 0 })
+        } else {
             element.scrollIntoView({
                 behavior: "smooth",
                 block: "start"
@@ -90,11 +121,15 @@ export default function Navbar() {
                         initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
                         animate={{ opacity: 1, backdropFilter: "blur(40px)" }}
                         exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
-                        className="fixed inset-0 w-full h-screen bg-black/40 pointer-events-auto flex flex-col items-center justify-center z-40"
+                        className="fixed inset-0 w-full h-screen bg-(--background)/90 pointer-events-auto flex flex-col items-center justify-center z-40"
                     >
                         <ul className="flex flex-col items-center gap-6">
                             {links.map((item, idx) => {
-                                const active = activeSection === item.toLowerCase()
+                                const active = isLinkActive(item)
+                                const linkClassName = `text-2xl font-black uppercase tracking-[0.4em] px-8 py-4 rounded-2xl transition-all ${active
+                                    ? "bg-(--foreground) text-(--background) scale-110"
+                                    : "text-(--foreground)/50 hover:text-(--foreground)"
+                                    }`
 
                                 return (
                                     <motion.li
@@ -103,18 +138,25 @@ export default function Navbar() {
                                         animate={{ opacity: 1, scale: 1 }}
                                         transition={{ delay: idx * 0.05 }}
                                     >
-                                        <button
-                                            onClick={() => {
-                                                scrollToSection(item.toLowerCase())
-                                                setIsOpen(false)
-                                            }}
-                                            className={`text-2xl font-black uppercase tracking-[0.4em] px-8 py-4 rounded-2xl transition-all ${active
-                                                ? "bg-white text-black scale-110"
-                                                : "text-white/50 hover:text-white"
-                                                }`}
-                                        >
-                                            {item}
-                                        </button>
+                                        {isHome ? (
+                                            <button
+                                                onClick={() => {
+                                                    scrollToSection(item.toLowerCase())
+                                                    setIsOpen(false)
+                                                }}
+                                                className={linkClassName}
+                                            >
+                                                {item}
+                                            </button>
+                                        ) : (
+                                            <Link
+                                                href={`/#${item.toLowerCase()}`}
+                                                onClick={() => setIsOpen(false)}
+                                                className={linkClassName}
+                                            >
+                                                {item}
+                                            </Link>
+                                        )}
                                     </motion.li>
                                 )
                             })}
@@ -130,15 +172,15 @@ export default function Navbar() {
                         ? "min(800px, calc(100vw - 24px))"
                         : "min(1100px, calc(100vw - 24px))",
                     backgroundColor: scrolled
-                        ? "rgba(3,7,18,0.8)"
+                        ? (isDark ? "rgba(3,7,18,0.8)" : "rgba(255,255,255,0.8)")
                         : "transparent",
                     borderColor: scrolled
-                        ? "rgba(255,255,255,0.1)"
+                        ? (isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.08)")
                         : "transparent",
                     backdropFilter: isOpen
                         ? "blur(0px)"
                         : scrolled
-                            ? "blur(12px)"
+                            ? "blur(8px)"
                             : "blur(0px)"
                 }}
                 className="pointer-events-auto relative w-full flex flex-col items-center rounded-full border transition-all duration-500 overflow-hidden"
@@ -146,54 +188,80 @@ export default function Navbar() {
                 <div className="w-full flex items-center justify-between px-3 sm:px-4 md:px-6 py-2 md:py-3">
 
                     {/* LOGO */}
-                    <motion.button
-                        onClick={() => scrollToSection("hero")}
-                        whileHover={{ scale: 1.08 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="z-20 flex items-center gap-2 pl-2 group"
-                    >
-                        <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-black font-black text-[10px] transition-all duration-300 group-hover:shadow-[0_0_12px_rgba(255,255,255,0.7)]">
-                            RG
-                        </div>
-                    </motion.button>
+                    {isHome ? (
+                        <motion.button
+                            onClick={() => scrollToSection("hero")}
+                            whileHover={{ scale: 1.08 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="z-20 flex items-center gap-2 pl-2 group"
+                        >
+                            <div className="w-8 h-8 bg-(--foreground) rounded-full flex items-center justify-center text-(--background) font-black text-[10px] transition-all duration-300 group-hover:shadow-[0_0_12px_rgba(0,0,0,0.25)] dark:group-hover:shadow-[0_0_12px_rgba(255,255,255,0.7)]">
+                                RG
+                            </div>
+                        </motion.button>
+                    ) : (
+                        <Link
+                            href="/"
+                            className="z-20 flex items-center gap-2 pl-2 group"
+                        >
+                            <motion.div
+                                whileHover={{ scale: 1.08 }}
+                                whileTap={{ scale: 0.95 }}
+                                className="w-8 h-8 bg-(--foreground) rounded-full flex items-center justify-center text-(--background) font-black text-[10px] transition-all duration-300 group-hover:shadow-[0_0_12px_rgba(0,0,0,0.25)] dark:group-hover:shadow-[0_0_12px_rgba(255,255,255,0.7)]"
+                            >
+                                RG
+                            </motion.div>
+                        </Link>
+                    )}
 
                     {/* DESKTOP LINKS */}
                     <ul className="hidden md:flex items-center gap-2 z-20">
                         {links.map((item) => {
-                            const active = activeSection === item.toLowerCase()
+                            const active = isLinkActive(item)
+                            const linkClassName = `relative px-5 py-2 text-[10px] font-black uppercase tracking-widest transition-all duration-500 ${active
+                                ? "text-(--foreground)"
+                                : "text-(--foreground)/60 hover:text-(--foreground)"
+                                }`
 
                             return (
                                 <li key={item}>
-                                    <button
-                                        onClick={() =>
-                                            scrollToSection(item.toLowerCase())
-                                        }
-                                        className={`relative px-5 py-2 text-[10px] font-black uppercase tracking-widest transition-all duration-500 ${active
-                                            ? "text-white"
-                                            : "text-white/40 hover:text-white"
-                                            }`}
-                                    >
-                                        {item}
-                                    </button>
+                                    {isHome ? (
+                                        <button
+                                            onClick={() =>
+                                                scrollToSection(item.toLowerCase())
+                                            }
+                                            className={linkClassName}
+                                        >
+                                            {item}
+                                        </button>
+                                    ) : (
+                                        <Link href={`/#${item.toLowerCase()}`} className={linkClassName}>
+                                            {item}
+                                        </Link>
+                                    )}
                                 </li>
                             )
                         })}
                     </ul>
 
                     {/* ACTION + MENU */}
-                    <div className="flex items-center gap-3 z-20">
+                    <div className="flex items-center gap-1 sm:gap-3 z-20">
 
-                        <motion.button
+                        <ThemeToggle />
+
+                        <motion.a
+                            href="/resume.pdf"
+                            download="Ranjima_Ghosh_Frontend_Engineer.pdf"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className="hidden sm:block bg-white text-black px-5 py-2 rounded-full text-[9px] font-black uppercase tracking-widest"
+                            className="hidden sm:block bg-(--foreground) text-(--background) px-5 py-2 rounded-full text-[9px] font-black uppercase tracking-widest cursor-pointer"
                         >
                             Resume
-                        </motion.button>
+                        </motion.a>
 
                         <button
                             onClick={() => setIsOpen(!isOpen)}
-                            className="md:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 focus:outline-none bg-white/5 rounded-full border border-white/10"
+                            className="md:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 focus:outline-none bg-(--foreground)/5 rounded-full border border-(--border)"
                         >
                             <motion.span
                                 animate={
@@ -201,14 +269,14 @@ export default function Navbar() {
                                         ? { rotate: 45, y: 6 }
                                         : { rotate: 0, y: 0 }
                                 }
-                                className="w-5 h-0.5 bg-white rounded-full"
+                                className="w-5 h-0.5 bg-(--foreground) rounded-full"
                             />
 
                             <motion.span
                                 animate={
                                     isOpen ? { opacity: 0 } : { opacity: 1 }
                                 }
-                                className="w-5 h-0.5 bg-white rounded-full"
+                                className="w-5 h-0.5 bg-(--foreground) rounded-full"
                             />
 
                             <motion.span
@@ -217,7 +285,7 @@ export default function Navbar() {
                                         ? { rotate: -45, y: -6 }
                                         : { rotate: 0, y: 0 }
                                 }
-                                className="w-5 h-0.5 bg-white rounded-full"
+                                className="w-5 h-0.5 bg-(--foreground) rounded-full"
                             />
                         </button>
                     </div>
@@ -226,11 +294,11 @@ export default function Navbar() {
                 {/* PROGRESS BAR */}
                 <motion.div
                     style={{ opacity: progressOpacity }}
-                    className="absolute bottom-0 left-0 w-full h-px pointer-events-none bg-white/10"
+                    className="absolute bottom-0 left-0 w-full h-px pointer-events-none bg-(--foreground)/10"
                 >
                     <motion.div
                         style={{ width: progressWidth }}
-                        className="h-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.5)]"
+                        className="h-full bg-(--foreground) shadow-[0_0_8px_rgba(0,0,0,0.3)] dark:shadow-[0_0_8px_rgba(255,255,255,0.5)]"
                     />
                 </motion.div>
             </motion.nav>
